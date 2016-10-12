@@ -26,7 +26,7 @@ class Player:
 		self.init_ship()
 		self.opponent = None
 		self.shots_location = []
-		self.sunk = None
+		self.sunk = 0
 		# for ship in SHIP_INFO:
 		# 	ship[0] = Ships(ship[0], ship[1])
 		# 	self.ships.append(ship[0])

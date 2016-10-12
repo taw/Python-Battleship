@@ -149,7 +149,7 @@ def is_ship_hit(player, ships, shot_loc):
 
 def update_game_board(player, coord, char):
 	'''updates player's current game board'''
-	player.gameboard.board[coord[0]][coord[1]] = char
+	player.gameboard.board[coord[1]][coord[0]] = char
 
 
 def is_ship_sunk(ship_hit):
@@ -162,6 +162,7 @@ def winner(sunk_ships):
 
 
 def game():
+	clear()
 	print(ascii_art())
 	print("Player 1")
 	Player1 = Player()
@@ -175,7 +176,7 @@ def game():
 	
 	
 	#asks players to place their ships
-	input("Players, enter location of your ships. Press enter to continue.")
+	input("Players, get ready to enter the location of your ships. Press enter to continue.")
 	clear()
 	for player in players:
 		#player.board.print_board()
@@ -183,7 +184,7 @@ def game():
 			place_ships(player, ships)
 			clear()
 			player.board.print_board()
-		input("You have placed all your ships. Press enter to continue.")
+		input("\nYou have placed all your ships. Press enter to continue.")
 	
 	#battle commences
 	clear()
@@ -193,60 +194,59 @@ def game():
 	for player in players:
 		player.gameboard.print_board()
 		
-		shot_loc = prompt_location(player.name, None, None)
-		shot_loc = convert_locs(shot_loc)
-		print(shot_loc) #
-		player.shots_location.append((1,1)) #
-
-		while shot_loc in player.shots_location:
-			clear()
-			print("You already fired in this location. Try another one")
-			player.gameboard.print_board()
+		while True:
 			shot_loc = prompt_location(player.name, None, None)
 			shot_loc = convert_locs(shot_loc)
-		#if is_hit(shot_loc, opponent.ship.positions):
-		#for ship in player.opponent.ships:
-		if is_ship_hit(player, player.opponent.ships, shot_loc): #shot_loc in ship.positions:
-			clear()
-			ship_hit = is_ship_hit(player, player.opponent.ships, shot_loc)
-			print("You HIT {}'s {}".format(player.opponent.name, ship_hit.ship_type))
-			ship_hit.health -= 1
-			player.shots_location.append(shot_loc)
-			if is_ship_sunk(ship_hit):
-				player.sunk += 1
-				print("Excellent shot {}'s {} is now SUNKED!".format(player.opponent.name, ship_hit.ship_type))
-				sunk_coords = is_ship_sunk(ship_hit)
-				for coords in sunk_coords:
-					update_game_board(player, coords, SUNK)
-				player.gameboard.print_board()
-				
-				if winner(player.sunk):
-					clear()
-					break
-						
-						
-			else:
-			# ship hit but not sunked yet
-				update_game_board(player, shot_loc, HIT)
-				player.gameboard.print_board()
-				input("Press enter to continue")
-				clear()
-			
-		else:
-			print("You missed! Try again.")
-			update_game_board(player, shot_loc, MISS)
-			player.gameboard.print_board()
+			print(shot_loc) #
+			player.shots_location.append((1,1)) #
 
-	print("Congratulations! You have demolished {}'s entire fleet.".format(player.opponent.name))
+			while shot_loc in player.shots_location:
+				clear()
+				print("You already fired in this location. Try another one")
+				player.gameboard.print_board()
+				shot_loc = prompt_location(player.name, None, None)
+				shot_loc = convert_locs(shot_loc)
+			#if is_hit(shot_loc, opponent.ship.positions):
+			#for ship in player.opponent.ships:
+			
+			if is_ship_hit(player, player.opponent.ships, shot_loc): #shot_loc in ship.positions:
+				clear()
+				ship_hit = is_ship_hit(player, player.opponent.ships, shot_loc)
+				print("\nYou HIT {}'s {}\n".format(player.opponent.name, ship_hit.ship_type))
+				ship_hit.health -= 1
+				player.shots_location.append(shot_loc)
+				if is_ship_sunk(ship_hit):
+					player.sunk += 1
+					print("\nExcellent shot {}'s {} is now SUNKED!".format(player.opponent.name, ship_hit.ship_type))
+					sunk_coords = is_ship_sunk(ship_hit)
+					for coords in sunk_coords:
+						update_game_board(player, coords, SUNK)
+					player.gameboard.print_board()
+					
+					if winner(player.sunk):
+						clear()
+						break
+				else:
+				# ship hit but not sunked yet
+					update_game_board(player, shot_loc, HIT)
+					player.gameboard.print_board()
+					input("/nPress enter to continue")
+					clear()
+			else:
+				print("\nYou missed! Try again.")
+				update_game_board(player, shot_loc, MISS)
+				player.gameboard.print_board()
+
+	print("\nCongratulations! You have demolished {}'s entire fleet.".format(player.opponent.name))
 	print("{}, you are the WINNER!".format(player.name))
 	input("Press enter to see both player boards.")
 	# display boards
-	print("\n {}'s board: \n".format(Player1.name))
+	print("\n{}'s board: \n".format(Player1.name))
 	Player1.board.print_board()
-	print("\n {}'s board: \n".format(Player2.name))
+	print("\n{}'s board: \n".format(Player2.name))
 	Player1.board.print_board()
 
-	input("Press enter to quit the game. Thanks for playing.")
+	input("\nPress enter to quit the game. Thanks for playing.")
 
 
 
